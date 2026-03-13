@@ -1,1 +1,3 @@
-target/\nstore.sqlite3\nkeystore/
+target/
+store.sqlite3
+keystore/
