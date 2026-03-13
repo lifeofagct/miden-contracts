@@ -1,0 +1,56 @@
+use miden::protocol::active_account
+use miden::protocol::native_account
+use miden::core::sys
+
+const SIG1 = word("miden::multisig::signer_one")
+const SIG2 = word("miden::multisig::signer_two")
+const SIG3 = word("miden::multisig::signer_three")
+const EXECUTED = word("miden::multisig::executed")
+const ATTEMPTS = word("miden::multisig::exec_attempts")
+
+pub proc sign_1
+    push.SIG1[0..2] exec.active_account::get_item
+    add.1
+    push.SIG1[0..2] exec.native_account::set_item
+    drop drop drop drop
+    exec.sys::truncate_stack
+end
+
+pub proc sign_2
+    push.SIG2[0..2] exec.active_account::get_item
+    add.1
+    push.SIG2[0..2] exec.native_account::set_item
+    drop drop drop drop
+    exec.sys::truncate_stack
+end
+
+pub proc sign_3
+    push.SIG3[0..2] exec.active_account::get_item
+    add.1
+    push.SIG3[0..2] exec.native_account::set_item
+    drop drop drop drop
+    exec.sys::truncate_stack
+end
+
+pub proc execute
+    push.ATTEMPTS[0..2] exec.active_account::get_item
+    add.1
+    push.ATTEMPTS[0..2] exec.native_account::set_item
+    drop drop drop drop
+    push.SIG1[0..2] exec.active_account::get_item
+    movdn.3 drop drop drop
+    push.SIG2[0..2] exec.active_account::get_item
+    movdn.3 drop drop drop
+    add
+    push.SIG3[0..2] exec.active_account::get_item
+    movdn.3 drop drop drop
+    add
+    push.1 swap gt
+    if.true
+        push.EXECUTED[0..2] exec.active_account::get_item
+        add.1
+        push.EXECUTED[0..2] exec.native_account::set_item
+        drop drop drop drop
+    end
+    exec.sys::truncate_stack
+end

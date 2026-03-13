@@ -1,0 +1,79 @@
+use miden::protocol::active_account
+use miden::protocol::native_account
+use miden::core::sys
+
+const HIGH_SCORE = word("miden::leaderboard::high_score")
+const ATTEMPTS = word("miden::leaderboard::attempts")
+
+# Stack after get_item: [value, 0, 0, 0] (value at TOP)
+# movdn.3 sends value to bottom: [0, 0, 0, value]
+# drop drop drop removes the 3 zeros, leaving value on top
+# push.NEW_SCORE then stack is [NEW_SCORE, value]
+# lt checks: is value < NEW_SCORE?
+
+pub proc try_score_25
+    push.ATTEMPTS[0..2] exec.active_account::get_item
+    add.1
+    push.ATTEMPTS[0..2] exec.native_account::set_item
+    drop drop drop drop
+    push.HIGH_SCORE[0..2] exec.active_account::get_item
+    movdn.3 drop drop drop
+    push.25 lt
+    if.true
+        push.HIGH_SCORE[0..2] exec.active_account::get_item
+        drop drop drop drop
+        push.0 push.0 push.0 push.25
+        push.HIGH_SCORE[0..2] exec.native_account::set_item
+        drop drop drop drop
+    end
+    exec.sys::truncate_stack
+end
+
+pub proc try_score_50
+    push.ATTEMPTS[0..2] exec.active_account::get_item
+    add.1
+    push.ATTEMPTS[0..2] exec.native_account::set_item
+    drop drop drop drop
+    push.HIGH_SCORE[0..2] exec.active_account::get_item
+    movdn.3 drop drop drop
+    push.50 lt
+    if.true
+        push.HIGH_SCORE[0..2] exec.active_account::get_item
+        drop drop drop drop
+        push.0 push.0 push.0 push.50
+        push.HIGH_SCORE[0..2] exec.native_account::set_item
+        drop drop drop drop
+    end
+    exec.sys::truncate_stack
+end
+
+pub proc try_score_100
+    push.ATTEMPTS[0..2] exec.active_account::get_item
+    add.1
+    push.ATTEMPTS[0..2] exec.native_account::set_item
+    drop drop drop drop
+    push.HIGH_SCORE[0..2] exec.active_account::get_item
+    movdn.3 drop drop drop
+    push.100 lt
+    if.true
+        push.HIGH_SCORE[0..2] exec.active_account::get_item
+        drop drop drop drop
+        push.0 push.0 push.0 push.100
+        push.HIGH_SCORE[0..2] exec.native_account::set_item
+        drop drop drop drop
+    end
+    exec.sys::truncate_stack
+end
+
+pub proc reset
+    push.HIGH_SCORE[0..2] exec.active_account::get_item
+    drop drop drop drop
+    push.0 push.0 push.0 push.0
+    push.HIGH_SCORE[0..2] exec.native_account::set_item
+    drop drop drop drop
+    push.ATTEMPTS[0..2] exec.active_account::get_item
+    add.1
+    push.ATTEMPTS[0..2] exec.native_account::set_item
+    drop drop drop drop
+    exec.sys::truncate_stack
+end

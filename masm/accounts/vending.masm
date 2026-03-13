@@ -1,0 +1,22 @@
+use miden::protocol::active_account
+use miden::protocol::native_account
+use miden::core::sys
+
+const TOTAL_DEPOSITED = word("miden::tutorials::total_deposited")
+const TOTAL_DISPENSED = word("miden::tutorials::total_dispensed")
+
+#! Record a deposit of 10 tokens
+pub proc deposit
+    push.TOTAL_DEPOSITED[0..2] exec.active_account::get_item
+    add.10
+    push.TOTAL_DEPOSITED[0..2] exec.native_account::set_item
+    exec.sys::truncate_stack
+end
+
+#! Record a dispense of 5 tokens
+pub proc dispense
+    push.TOTAL_DISPENSED[0..2] exec.active_account::get_item
+    add.5
+    push.TOTAL_DISPENSED[0..2] exec.native_account::set_item
+    exec.sys::truncate_stack
+end

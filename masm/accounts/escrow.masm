@@ -1,0 +1,32 @@
+use miden::protocol::active_account
+use miden::protocol::native_account
+use miden::core::sys
+
+const LOCKED = word("miden::escrow::amount_locked")
+const APPROVED = word("miden::escrow::approved_flag")
+const CLAIMED = word("miden::escrow::claimed_flag")
+
+pub proc lock
+    push.LOCKED[0..2] exec.active_account::get_item
+    add.50
+    push.LOCKED[0..2] exec.native_account::set_item
+    exec.sys::truncate_stack
+end
+
+pub proc approve
+    push.APPROVED[0..2] exec.active_account::get_item
+    add.1
+    push.APPROVED[0..2] exec.native_account::set_item
+    exec.sys::truncate_stack
+end
+
+pub proc claim
+    push.APPROVED[0..2] exec.active_account::get_item
+    push.1 eq
+    if.true
+        push.CLAIMED[0..2] exec.active_account::get_item
+        add.1
+        push.CLAIMED[0..2] exec.native_account::set_item
+    end
+    exec.sys::truncate_stack
+end

@@ -1,0 +1,31 @@
+use miden::protocol::active_account
+use miden::protocol::native_account
+use miden::core::sys
+
+const VOTES_YES = word("miden::tutorials::votes_yes")
+const VOTES_NO = word("miden::tutorials::votes_no")
+const VOTES_ABSTAIN = word("miden::tutorials::votes_abstain")
+
+#! Vote yes
+pub proc vote_yes
+    push.VOTES_YES[0..2] exec.active_account::get_item
+    add.1
+    push.VOTES_YES[0..2] exec.native_account::set_item
+    exec.sys::truncate_stack
+end
+
+#! Vote no
+pub proc vote_no
+    push.VOTES_NO[0..2] exec.active_account::get_item
+    add.1
+    push.VOTES_NO[0..2] exec.native_account::set_item
+    exec.sys::truncate_stack
+end
+
+#! Vote abstain
+pub proc vote_abstain
+    push.VOTES_ABSTAIN[0..2] exec.active_account::get_item
+    add.1
+    push.VOTES_ABSTAIN[0..2] exec.native_account::set_item
+    exec.sys::truncate_stack
+end

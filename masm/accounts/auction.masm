@@ -1,0 +1,60 @@
+use miden::protocol::active_account
+use miden::protocol::native_account
+use miden::core::sys
+
+const HIGHEST = word("miden::auction::highest_bid")
+const TOTAL = word("miden::auction::total_bids")
+
+pub proc bid_10
+    push.TOTAL[0..2] exec.active_account::get_item
+    add.1
+    push.TOTAL[0..2] exec.native_account::set_item
+    drop drop drop drop
+    push.HIGHEST[0..2] exec.active_account::get_item
+    movdn.3 drop drop drop
+    push.10 swap gt
+    if.true
+        push.HIGHEST[0..2] exec.active_account::get_item
+        drop drop drop drop
+        push.0 push.0 push.0 push.10
+        push.HIGHEST[0..2] exec.native_account::set_item
+        drop drop drop drop
+    end
+    exec.sys::truncate_stack
+end
+
+pub proc bid_25
+    push.TOTAL[0..2] exec.active_account::get_item
+    add.1
+    push.TOTAL[0..2] exec.native_account::set_item
+    drop drop drop drop
+    push.HIGHEST[0..2] exec.active_account::get_item
+    movdn.3 drop drop drop
+    push.25 swap gt
+    if.true
+        push.HIGHEST[0..2] exec.active_account::get_item
+        drop drop drop drop
+        push.0 push.0 push.0 push.25
+        push.HIGHEST[0..2] exec.native_account::set_item
+        drop drop drop drop
+    end
+    exec.sys::truncate_stack
+end
+
+pub proc bid_50
+    push.TOTAL[0..2] exec.active_account::get_item
+    add.1
+    push.TOTAL[0..2] exec.native_account::set_item
+    drop drop drop drop
+    push.HIGHEST[0..2] exec.active_account::get_item
+    movdn.3 drop drop drop
+    push.50 swap gt
+    if.true
+        push.HIGHEST[0..2] exec.active_account::get_item
+        drop drop drop drop
+        push.0 push.0 push.0 push.50
+        push.HIGHEST[0..2] exec.native_account::set_item
+        drop drop drop drop
+    end
+    exec.sys::truncate_stack
+end
